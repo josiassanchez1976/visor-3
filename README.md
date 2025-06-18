@@ -33,3 +33,20 @@ Ejemplo:
   }
 ]
 ```
+
+## Depuración manual
+
+Al cargar las tiendas se mostrará un botón de **Eliminar** (❌) y uno de **Aprobar** (✅) en cada tarjeta. El botón de eliminar quita la tienda de la vista sin guardar nada. El de aprobar también la oculta, pero la almacena temporalmente en memoria.
+
+Arriba de la lista encontrarás el botón **Exportar aprobadas**. Al pulsarlo se descargará un archivo `approved_stores.txt` con las tiendas aprobadas en el siguiente formato:
+
+```
+Nombre
+Dirección
+Teléfono
+Categoría
+
+(repetir por cada tienda)
+```
+
+Después de exportar, la lista de aprobadas se vacía. Estos datos sólo existen en memoria; al recargar la página se pierden.
