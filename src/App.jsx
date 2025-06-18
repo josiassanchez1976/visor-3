@@ -6,7 +6,8 @@ import ScrollArea from './components/ScrollArea.jsx'
 import { Trash2 } from 'lucide-react'
 
 const STORAGE_KEY = 'metalStores'
-const REQUIRED_FIELDS = ['title', 'address', 'url']
+// Solo la URL es obligatoria; el resto se rellena con "" si falta
+const REQUIRED_FIELDS = ['url']
 
 export default function App() {
   const [stores, setStores] = useState([])
@@ -42,12 +43,19 @@ export default function App() {
           return
         }
         entries = entries.map((obj) => {
-          const normalized = {}
+          const tmp = {}
           Object.entries(obj).forEach(([k, v]) => {
-            normalized[k.trim().toLowerCase()] = v
+            tmp[k.trim().toLowerCase()] = v
           })
-          if (normalized.category) normalized.categoryname = normalized.category
-          return normalized
+          if (tmp.category && !tmp.categoryname) tmp.categoryname = tmp.category
+          if (tmp.name && !tmp.title) tmp.title = tmp.name
+          return {
+            title: tmp.title || '',
+            address: tmp.address || '',
+            categoryName: tmp.categoryname || '',
+            phone: tmp.phone || '',
+            url: tmp.url,
+          }
         })
         for (let i = 0; i < entries.length; i++) {
           for (const field of REQUIRED_FIELDS) {

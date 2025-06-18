@@ -16,8 +16,9 @@ If you are developing a production application, we recommend using TypeScript wi
 Al iniciar la aplicación no existen tiendas cargadas. Para importarlas debes
 seleccionar un archivo `.json` usando el campo de subida de archivos. El JSON
 puede ser un array de objetos o un objeto con una propiedad `stores` o `data`
-que contenga dicho array. Cada elemento debe incluir al menos los campos
-`title`, `address` y `url`. Opcionalmente se aceptan `phone` y `categoryName`.
+que contenga dicho array. Cada elemento debe incluir al menos el campo `url`.
+Si faltan `title` (o `name`), `address` o `categoryName`, se rellenarán con una
+cadena vacía. Opcionalmente se acepta `phone`.
 
 Ejemplo:
 
