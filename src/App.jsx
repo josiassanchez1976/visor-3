@@ -6,6 +6,7 @@ import ScrollArea from './components/ScrollArea.jsx'
 import { Trash2 } from 'lucide-react'
 
 const STORAGE_KEY = 'metalStores'
+const REQUIRED_FIELDS = ['title', 'address', 'url']
 
 export default function App() {
   const [stores, setStores] = useState([])
@@ -27,25 +28,37 @@ export default function App() {
   const handleFile = (e) => {
     const file = e.target.files[0]
     setError('')
-    if (!file || !file.name.endsWith('.json')) {
+    if (!file || !file.name.toLowerCase().endsWith('.json')) {
       setError('Selecciona un archivo .json válido.')
       return
     }
     const reader = new FileReader()
     reader.onload = (ev) => {
       try {
-        const json = JSON.parse(ev.target.result)
-        if (
-          !Array.isArray(json) ||
-          !json.every((o) =>
-            o.title && o.address && o.phone && o.categoryName && o.url
-          )
-        ) {
-          setError('Archivo JSON inválido.')
+        const raw = JSON.parse(ev.target.result)
+        let entries = Array.isArray(raw) ? raw : raw.stores || raw.data
+        if (!Array.isArray(entries)) {
+          setError('El archivo JSON debe contener un array de objetos.')
           return
         }
-        setStores(json)
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(json))
+        entries = entries.map((obj) => {
+          const normalized = {}
+          Object.entries(obj).forEach(([k, v]) => {
+            normalized[k.trim().toLowerCase()] = v
+          })
+          if (normalized.category) normalized.categoryname = normalized.category
+          return normalized
+        })
+        for (let i = 0; i < entries.length; i++) {
+          for (const field of REQUIRED_FIELDS) {
+            if (!entries[i][field]) {
+              setError(`Falta el campo "${field}" en la entrada ${i + 1}.`)
+              return
+            }
+          }
+        }
+        setStores(entries)
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries))
       } catch {
         setError('Error al leer el archivo.')
       }
