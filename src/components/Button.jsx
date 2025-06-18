@@ -5,6 +5,7 @@ export default function Button({ variant = 'default', className = '', ...props }
   const variants = {
     default: 'bg-blue-600 text-white hover:bg-blue-700',
     destructive: 'bg-red-600 text-white hover:bg-red-700',
+    success: 'bg-green-600 text-white hover:bg-green-700',
   };
   return <button className={`${base} ${variants[variant]} ${className}`} {...props} />;
 }
